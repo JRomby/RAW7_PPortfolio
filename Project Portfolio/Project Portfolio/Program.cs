@@ -27,4 +27,12 @@ namespace Project_Portfolio
             }
         }
     }
+    class Entity
+    {
+        static void entityMain(string[] args)
+        { 
+        
+        }
+
+    }
 }
