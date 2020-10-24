@@ -1,8 +1,11 @@
+using Npgsql;
+
 namespace DBconnection
 {
     public class DBconnection
     {
         private string connectionString;
+        private NpgsqlConnection conn;
         
         public DBconnection (string connectionString)
         {
@@ -11,7 +14,7 @@ namespace DBconnection
 
         public void OpenConnection()
         {
-            using var conn = new NpgsqlConnection(connectionString);
+            conn = new NpgsqlConnection(connectionString);
             conn.Open(); //connect to DB
         }
 
@@ -22,10 +25,19 @@ namespace DBconnection
         
         public void ConnectionCommand(string commandString)
         {
-            cmd.Connection = conn;
-            cmd.CommandText = commandString;
-            var reader = cmd.ExecuteReader();
+            using var command = new NpgsqlCommand();
+            command.Connection = conn;
+            command.CommandText = commandString;
+            var reader = command.ExecuteReader();
+        }
+
+        public object ReturnDataTable(string commandString)
+        {
+            using var command = new NpgsqlCommand();
+            command.Connection = conn;
+            command.CommandText = commandString;
+            NpgsqlDataReader dataReader = command.ExecuteReader();
+            return dataReader;
         }
     }
-    
 }
